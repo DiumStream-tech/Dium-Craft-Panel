@@ -119,13 +119,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <label for="password" class="form-label">Mot de passe</label>
                                 <input type="password" name="password" class="form-control" required>
                             </div>
-                            <script src="https://www.google.com/recaptcha/enterprise.js?render=6LfQWIglAAAAAEzTj18fKpd0udB2MBkUojHnRr3p"></script>
-                            <script>
-                                grecaptcha.enterprise.ready(function () {
-                                    grecaptcha.enterprise.execute('6LfQWIglAAAAAEzTj18fKpd0udB2MBkUojHnRr3p', { action: 'login' }).then(function (token) {
-                                    });
-                                });
-                            </script>
                             <button type="submit" name="submit" class="btn btn-primary">Se connecter</button>
                         </form>
                         <div class="mt-3">
