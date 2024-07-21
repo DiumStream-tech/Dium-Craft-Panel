@@ -6,6 +6,42 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Configuration de la base de données</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .card {
+            background-color: #1e1e1e;
+            border: none;
+        }
+        .form-control {
+            background-color: #333;
+            border: 1px solid #444;
+            color: #fff;
+        }
+        .form-control:focus {
+            background-color: #333;
+            color: #fff;
+        }
+        .btn-primary {
+            background-color: #6200ea;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #3700b3;
+        }
+        .alert {
+            background-color: #333;
+            border: 1px solid #444;
+        }
+        .alert-danger {
+            color: #ff4081;
+        }
+        .alert-success {
+            color: #00e676;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
