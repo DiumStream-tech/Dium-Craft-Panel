@@ -122,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <button type="submit" name="submit" class="btn btn-primary">Se connecter</button>
                         </form>
                         <div class="mt-3">
-                            <a href="mdp.php" class="btn btn-primary">Mot de passe oublié ?</a>
+                            <a href="forgot_password.php" class="btn btn-primary">Mot de passe oublié ?</a>
                         </div>
                     </div>
                 </div>
