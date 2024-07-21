@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Configuration de la base de données</title>
+    <title>Configuration du Panel</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <style>
         body {
@@ -31,21 +31,11 @@
         .btn-primary:hover {
             background-color: #3700b3;
         }
-        .alert {
-            background-color: #333;
-            border: 1px solid #444;
-        }
-        .alert-danger {
-            color: #ff4081;
-        }
-        .alert-success {
-            color: #00e676;
-        }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1 id="config-title" class="mt-5 mb-4">Configuration de la base de données</h1>
+    <h1 id="config-title" class="mt-5 mb-4">Configuration du Panel</h1>
 
     <?php
     $configFilePath = 'config.php';
@@ -56,6 +46,11 @@
             $dbname = $_POST['dbname'];
             $username = $_POST['username'];
             $password = $_POST['password'];
+            $smtpHost = $_POST['smtp_host'];
+            $smtpPort = $_POST['smtp_port'];
+            $smtpUsername = $_POST['smtp_username'];
+            $smtpPassword = $_POST['smtp_password'];
+            $smtpFrom = $_POST['smtp_from'];
 
             try {
                 $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
@@ -67,6 +62,14 @@
     'dbname' => '$dbname',
     'username' => '$username',
     'password' => '$password',
+];
+
+\$smtpConfig = [
+    'host' => '$smtpHost',
+    'port' => $smtpPort,
+    'username' => '$smtpUsername',
+    'password' => '$smtpPassword',
+    'from' => '$smtpFrom',
 ];
 
 ?>
@@ -84,6 +87,7 @@ EOT;
             }
         } else {
             echo '<form class="form-container" method="post">';
+            echo '<h2>Configuration de la base de données</h2>';
             echo '<div class="form-group">';
             echo '<label for="host">Hôte:</label>';
             echo '<input type="text" class="form-control" name="host" required>';
@@ -100,6 +104,27 @@ EOT;
             echo '<label for="password">Mot de passe:</label>';
             echo '<input type="password" class="form-control" name="password">';
             echo '</div>';
+            echo '<h2 class="mt-4">Configuration SMTP</h2>';
+            echo '<div class="form-group">';
+            echo '<label for="smtp_host">Hôte SMTP:</label>';
+            echo '<input type="text" class="form-control" name="smtp_host" required>';
+            echo '</div>';
+            echo '<div class="form-group">';
+            echo '<label for="smtp_port">Port SMTP:</label>';
+            echo '<input type="number" class="form-control" name="smtp_port" required>';
+            echo '</div>';
+            echo '<div class="form-group">';
+            echo '<label for="smtp_username">Nom d utilisateur SMTP:</label>';
+            echo '<input type="text" class="form-control" name="smtp_username" required>';
+            echo '</div>';
+            echo '<div class="form-group">';
+            echo '<label for="smtp_password">Mot de passe SMTP:</label>';
+            echo '<input type="password" class="form-control" name="smtp_password" required>';
+            echo '</div>';
+            echo '<div class="form-group">';
+            echo '<label for="smtp_from">Adresse e-mail d expédition:</label>';
+            echo '<input type="email" class="form-control" name="smtp_from" required>';
+            echo '</div>';
             echo '<button type="submit" class="btn btn-primary mt-3">Enregistrer</button>';
             echo '</form>';
             exit;
@@ -111,7 +136,7 @@ EOT;
     ?>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
