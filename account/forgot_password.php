@@ -125,6 +125,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="alert alert-success">
                                 Un e-mail avec les instructions pour réinitialiser votre mot de passe a été envoyé à votre adresse e-mail.
                             </div>
+                            <script>
+                                setTimeout(function() {
+                                    window.location.href = '/';
+                                }, 5000);
+                            </script>
                         <?php elseif (!empty($errors)) : ?>
                             <div class="alert alert-danger">
                                 <?php foreach ($errors as $error) : ?>
