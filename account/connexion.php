@@ -17,11 +17,11 @@ if (isset($_SESSION['user_token'])) {
         exit();
     }
 }
-function generateToken( $length = 40 ) {
-    $characters       = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_!?./$';
-    $charactersLength = strlen( $characters );
-    $token            = '';
-    for( $i = 0; $i < $length; $i++ ) {
+function generateToken($length = 40) {
+    $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_!?./$';
+    $charactersLength = strlen($characters);
+    $token = '';
+    for ($i = 0; $i < $length; $i++) {
         $token .= $characters[rand(0, $charactersLength - 1)];
     }
     return $token;
@@ -89,7 +89,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="fr" data-bs-theme="dark">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -97,7 +96,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Connexion</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 </head>
-
 <body>
     <div class="container mt-5">
         <div class="row justify-content-center">
@@ -115,11 +113,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <form method="post" action="">
                             <div class="mb-3">
                                 <label for="email" class="form-label">Adresse email</label>
-                                <input type="email" name="email" class="form-control" required="">
+                                <input type="email" name="email" class="form-control" required>
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Mot de passe</label>
-                                <input type="password" name="password" class="form-control" required="">
+                                <input type="password" name="password" class="form-control" required>
                             </div>
                             <script src="https://www.google.com/recaptcha/enterprise.js?render=6LfQWIglAAAAAEzTj18fKpd0udB2MBkUojHnRr3p"></script>
                             <script>
@@ -130,6 +128,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </script>
                             <button type="submit" name="submit" class="btn btn-primary">Se connecter</button>
                         </form>
+                        <div class="mt-3">
+                            <a href="mdp.php" class="btn btn-primary">Mot de passe oublié ?</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -139,5 +140,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
-
 </html>
