@@ -193,10 +193,11 @@ if ($stmt->rowCount() > 0) {
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Panel</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-        <style>
+    <style>
         body {
             background-color: #121212;
             color: #ffffff;
+            padding-top: 70px; /* Ajout de padding pour compenser la navbar fixe */
         }
         .card {
             background-color: #1e1e1e;
@@ -218,55 +219,69 @@ if ($stmt->rowCount() > 0) {
         .btn-primary:hover {
             background-color: #3700b3;
         }
+        .navbar-nav {
+            margin-right: auto;
+            margin-left: auto;
+        }
+        .navbar-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .navbar-buttons form, .navbar-buttons .btn {
+            margin: 0 5px;
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <a class="navbar-brand ml-2">Panel</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav" >
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Général</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="#server-info-settings">Serveur</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="#loader-settings">Loader</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#rpc-settings">Discord RPC</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="#splash-settings">Splash</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#changelog-settings">Changelog</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#maintenance-settings">Maintenance</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#whitelist-settings">Whitelist</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#ignored-folders-settings">Dossiers Ignorés</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#roles-settings">Fond d'écran par rôle</a>
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0 ml-auto" method="post" action="">
-            <button class="btn btn-outline-light" type="submit" name="logout">Déconnexion</button>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand">Panel</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Général</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#server-info-settings">Serveur</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#loader-settings">Loader</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#rpc-settings">Discord RPC</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#splash-settings">Splash</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#changelog-settings">Changelog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#maintenance-settings">Maintenance</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#whitelist-settings">Whitelist</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#ignored-folders-settings">Dossiers Ignorés</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#roles-settings">Fond d'écran par rôle</a>
+                    </li>
+                </ul>
+                <div class="navbar-buttons">
+                <form class="d-inline" method="post" action="">
+                    <button class="btn btn-outline-light" type="submit" name="logout">Déconnexion</button>
+                </form>
             <a class="btn btn-outline-light" name="export" href="./utils/export">Exporter</a>
-        </form>
-        <form id="importForm" class="form-inline my-2 my-lg-0 ml-auto" method="post" action="utils/import.php" enctype="multipart/form-data">
-    <label class="btn btn-outline-light">
-        Importer
-        <input type="file" id="jsonFileInput" name="json_file" style="display:none;" accept=".json" required>
+        <form id="importForm" class="d-inline" method="post" action="utils/import.php" enctype="multipart/form-data">
+    <label class="btn btn-outline-light mb-0">
+            Importer
+            <input type="file" id="jsonFileInput" name="json_file" style="display:none;" accept=".json" required>
     </label>
 </form>
 
