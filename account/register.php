@@ -81,6 +81,30 @@ if (isset($_POST['submit'])) {
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Inscription</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    body {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .card {
+            background-color: #1e1e1e;
+            border: none;
+        }
+        .form-control {
+            background-color: #333;
+            border: 1px solid #444;
+            color: #fff;
+        }
+        .form-control:focus {
+            background-color: #333;
+            color: #fff;
+        }
+        .btn-primary {
+            background-color: #6200ea;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #3700b3;
+        }
 </head>
 <body>
 <div class="container mt-5">
