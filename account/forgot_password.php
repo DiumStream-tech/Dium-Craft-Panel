@@ -1,15 +1,12 @@
 <?php
 session_start();
 
-// Informations de connexion à la base de données
-$host = '109.234.166.35';
-$dbname = 'sc1mifa5051_launcher';
-$username = 'sc1mifa5051_launcher';
-$password = 'DiumCraft2023@';
+// Inclure le fichier de configuration
+require_once '../config.php';
 
 // Connexion à la base de données
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
+    $pdo = new PDO("mysql:host=" . $databaseConfig['host'] . ";dbname=" . $databaseConfig['dbname'] . ";charset=utf8mb4", $databaseConfig['username'], $databaseConfig['password']);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     die("Erreur de connexion : " . $e->getMessage());
@@ -17,46 +14,57 @@ try {
 
 $errors = [];
 $success = false;
+$consoleError = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
-    $newPassword = $_POST['new_password'];
-    $confirmPassword = $_POST['confirm_password'];
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = "Adresse e-mail invalide.";
     }
 
-    if (strlen($newPassword) < 8) {
-        $errors[] = "Le nouveau mot de passe doit contenir au moins 8 caractères.";
-    }
-
-    if ($newPassword !== $confirmPassword) {
-        $errors[] = "Les nouveaux mots de passe ne correspondent pas.";
-    }
-
     if (empty($errors)) {
-        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-        
         $stmt = $pdo->prepare("SELECT id FROM users WHERE email = :email");
         $stmt->execute(['email' => $email]);
         $user = $stmt->fetch();
 
         if ($user) {
-            $updateStmt = $pdo->prepare("UPDATE users SET password = :password WHERE id = :id");
+            // Générer un token unique
+            $token = bin2hex(random_bytes(32));
+            
+            // Mettre à jour le token dans la base de données
+            $updateStmt = $pdo->prepare("UPDATE users SET token = :token WHERE id = :id");
             $updateStmt->execute([
-                'password' => $hashedPassword,
+                'token' => $token,
                 'id' => $user['id']
             ]);
-            $success = true;
-        } else {
-            $errors[] = "Utilisateur non trouvé.";
-        }
-    }
 
-    if ($success) {
-        header('Location: account/connexion');
-        exit();
+            // Préparer l'e-mail
+            $to = $email;
+            $subject = "Réinitialisation de votre mot de passe";
+            $reset_link = "https://" . $_SERVER['HTTP_HOST'] . "/account/reset_password.php?token=" . $token;
+            $message = "Bonjour,\n\nVous avez demandé une réinitialisation de votre mot de passe. Cliquez sur le lien suivant pour réinitialiser votre mot de passe :\n\n$reset_link\n\nSi vous n'avez pas demandé cette réinitialisation, veuillez ignorer cet e-mail.";
+
+            // En-têtes de l'e-mail
+            $headers = "From: " . $smtpConfig['from'] . "\r\n";
+            $headers .= "Reply-To: " . $smtpConfig['from'] . "\r\n";
+            $headers .= "X-Mailer: PHP/" . phpversion();
+
+            // Configuration SMTP
+            ini_set('SMTP', $smtpConfig['host']);
+            ini_set('smtp_port', $smtpConfig['port']);
+            ini_set('sendmail_from', $smtpConfig['from']);
+
+            // Envoyer l'e-mail
+            if (mail($to, $subject, $message, $headers)) {
+                $success = true;
+            } else {
+                $errors[] = "Erreur lors de l'envoi de l'e-mail. Veuillez réessayer.";
+                $consoleError = "Erreur SMTP : Impossible d'envoyer l'e-mail. Vérifiez la configuration SMTP.";
+            }
+        } else {
+            $errors[] = "Aucun compte associé à cette adresse e-mail.";
+        }
     }
 }
 ?>
@@ -67,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Changer le mot de passe</title>
+    <title>Mot de passe oublié</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <style>
         body {
@@ -97,7 +105,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .alert {
             background-color: #333;
             border: 1px solid #444;
+        }
+        .alert-danger {
             color: #ff4081;
+        }
+        .alert-success {
+            color: #00e676;
         }
     </style>
 </head>
@@ -107,8 +120,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <h2 class="card-title">Changer le mot de passe</h2>
-                        <?php if (!empty($errors)) : ?>
+                        <h2 class="card-title">Mot de passe oublié</h2>
+                        <?php if ($success) : ?>
+                            <div class="alert alert-success">
+                                Un e-mail avec les instructions pour réinitialiser votre mot de passe a été envoyé à votre adresse e-mail.
+                            </div>
+                        <?php elseif (!empty($errors)) : ?>
                             <div class="alert alert-danger">
                                 <?php foreach ($errors as $error) : ?>
                                     <p><?php echo htmlspecialchars($error); ?></p>
@@ -120,15 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <label for="email" class="form-label">Adresse e-mail</label>
                                 <input type="email" name="email" id="email" class="form-control" required>
                             </div>
-                            <div class="mb-3">
-                                <label for="new_password" class="form-label">Nouveau mot de passe</label>
-                                <input type="password" name="new_password" id="new_password" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="confirm_password" class="form-label">Confirmer le nouveau mot de passe</label>
-                                <input type="password" name="confirm_password" id="confirm_password" class="form-control" required>
-                            </div>
-                            <button type="submit" name="submit" class="btn btn-primary">Changer le mot de passe</button>
+                            <button type="submit" name="submit" class="btn btn-primary">Réinitialiser le mot de passe</button>
                         </form>
                     </div>
                 </div>
@@ -138,5 +147,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <?php if (!empty($consoleError)) : ?>
+    <script>
+        console.error("<?php echo $consoleError; ?>");
+    </script>
+    <?php endif; ?>
 </body>
 </html>
