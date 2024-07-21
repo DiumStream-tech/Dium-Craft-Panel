@@ -95,7 +95,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Connexion</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-    body {
+    <style>
+        body {
             background-color: #121212;
             color: #ffffff;
         }
@@ -119,6 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .btn-primary:hover {
             background-color: #3700b3;
         }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
